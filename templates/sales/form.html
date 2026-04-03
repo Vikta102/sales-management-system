@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Record Sale - SalesMS{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Record Sale</h1>
+    <a class="btn btn-outline-secondary" href="{{ url_for('sales.list_sales') }}">Back</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      {% if not products %}
+        <div class="alert alert-warning mb-0">
+          You need to create a product before recording sales.
+          <a href="{{ url_for('products.new_product') }}" class="alert-link">Create a product</a>.
+        </div>
+      {% else %}
+        <form method="post" action="{{ url_for('sales.create_sale') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Product</label>
+              <select class="form-select" name="product_id" id="product_id" required>
+                {% for p in products %}
+                  <option value="{{ p.id }}" data-price="{{ p.price }}" data-stock="{{ p.stock }}">{{ p.name }} (stock: {{ p.stock }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Quantity</label>
+              <input class="form-control" name="quantity" type="number" min="1" step="1" value="1" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Unit Price</label>
+              <input class="form-control" name="unit_price" id="unit_price" type="number" min="0" step="0.01" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Date</label>
+              <input class="form-control" name="sale_date" type="date" value="{{ today }}" required>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary" type="submit">Save Sale</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const productSelect = document.getElementById("product_id");
+  const unitPrice = document.getElementById("unit_price");
+  function syncPrice() {
+    const option = productSelect?.selectedOptions?.[0];
+    if (!option) return;
+    const price = option.getAttribute("data-price");
+    if (unitPrice && (!unitPrice.value || parseFloat(unitPrice.value) === 0)) {
+      unitPrice.value = price;
+    }
+  }
+  if (productSelect) {
+    productSelect.addEventListener("change", syncPrice);
+    syncPrice();
+  }
+</script>
+{% endblock %}

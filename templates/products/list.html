@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Products - SalesMS{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Products</h1>
+    <a class="btn btn-primary" href="{{ url_for('products.new_product') }}">New Product</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-striped mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>SKU</th>
+            <th class="text-end">Price</th>
+            <th class="text-end">Stock</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+            <tr>
+              <td>{{ p.name }}</td>
+              <td class="text-muted">{{ p.sku or "-" }}</td>
+              <td class="text-end">${{ "{:,.2f}".format(p.price) }}</td>
+              <td class="text-end">{{ p.stock }}</td>
+              <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('products.edit_product', product_id=p.id) }}">Edit</a>
+                <form class="d-inline" method="post" action="{{ url_for('products.delete_product', product_id=p.id) }}" onsubmit="return confirm('Delete this product?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          {% if not products %}
+            <tr><td colspan="5" class="text-center text-muted py-4">No products yet.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

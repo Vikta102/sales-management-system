@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - SalesMS{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Dashboard</h1>
+    <div class="d-flex gap-2">
+      <a class="btn btn-primary" href="{{ url_for('sales.new_sale') }}">Record Sale</a>
+      <a class="btn btn-outline-secondary" href="{{ url_for('products.new_product') }}">Add Product</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Total Revenue</div>
+          <div class="display-6">${{ "{:,.2f}".format(revenue) }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Total Sales</div>
+          <div class="display-6">{{ sales_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Products</div>
+          <div class="display-6">{{ product_count }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
