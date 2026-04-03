@@ -1,6 +1,6 @@
 # Sales Management System (Flask + PostgreSQL)
 
-Simple, production-ready Sales Management System suitable for Railway deployment and university assignments.
+Simple, production-ready Sales Management System 
 
 ## Features
 - Auth: register/login/logout
